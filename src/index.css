@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* Optional: Add tailored font family if needed, but Tailwind defaults are usually fine */
+html {
+  scroll-behavior: smooth;
+}
