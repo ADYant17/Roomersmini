@@ -6,9 +6,6 @@ import {
     UserCheck,
     Mail,
     CheckCircle,
-    CreditCard,
-    Hash,
-    Upload,
     AlertCircle,
     ArrowRight,
     Loader2
@@ -21,7 +18,6 @@ const SignupPage = ({ onNavigate }) => {
         email: '',
         otp: '',
         password: '',
-        rollNumber: '',
 
         termsAgreed: false
     });
@@ -29,10 +25,8 @@ const SignupPage = ({ onNavigate }) => {
     const [generatedOtp, setGeneratedOtp] = useState(null);
     const [otpExpiry, setOtpExpiry] = useState(null);
 
-    const [verificationMethod, setVerificationMethod] = useState('id'); // 'id' or 'roll'
     const [otpStatus, setOtpStatus] = useState('idle'); // 'idle', 'sending', 'sent', 'verified'
     const [isLoading, setIsLoading] = useState(false);
-    const [fileName, setFileName] = useState('');
 
     // OTP Logic
     const handleSendOtp = () => {
@@ -78,18 +72,21 @@ const SignupPage = ({ onNavigate }) => {
         }, 1000);
     };
 
-    const handleFileUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) setFileName(file.name);
-    };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (otpStatus !== 'verified' || !formData.termsAgreed) return;
 
-        // Final submission logic would go here
-        alert("Verification submitted successfully! An admin will review your details.");
-        onNavigate('landing');
+        // Store user in localStorage (Mock Backend)
+        const newUser = {
+            ...formData,
+            isVerified: true
+        };
+        localStorage.setItem('roomers_user', JSON.stringify(newUser));
+
+        alert("Verification submitted successfully! You can now log in.");
+        onNavigate('login');
     };
 
     return (
@@ -267,60 +264,9 @@ const SignupPage = ({ onNavigate }) => {
                         </div>
 
                         {/* College ID Verification Switcher */}
-                        <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-3">College Verification Method</label>
-                            <div className="flex bg-slate-100 p-1 rounded-xl mb-4">
-                                <button
-                                    type="button"
-                                    onClick={() => setVerificationMethod('id')}
-                                    className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${verificationMethod === 'id' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                                >
-                                    <div className="flex items-center justify-center">
-                                        <CreditCard className="w-4 h-4 mr-2" />
-                                        Upload ID Card
-                                    </div>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setVerificationMethod('roll')}
-                                    className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${verificationMethod === 'roll' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                                >
-                                    <div className="flex items-center justify-center">
-                                        <Hash className="w-4 h-4 mr-2" />
-                                        Roll Number
-                                    </div>
-                                </button>
-                            </div>
 
-                            {/* Conditional Inputs */}
-                            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center border-dashed border-2 hover:bg-blue-50/50 transition-colors group cursor-pointer relative">
-                                {verificationMethod === 'id' ? (
-                                    <>
-                                        <input type="file" onChange={handleFileUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*,.pdf" />
-                                        <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2 group-hover:text-blue-500 transition-colors" />
-                                        <p className="text-sm font-medium text-slate-700">
-                                            {fileName ? <span className="text-blue-600">{fileName}</span> : "Click to upload ID Card"}
-                                        </p>
-                                        <p className="text-xs text-slate-400 mt-1">PNG, JPG or PDF (Max 5MB)</p>
-                                        <div className="mt-2 text-xs text-orange-600 bg-orange-50 inline-block px-2 py-1 rounded">
-                                            Visible only to admins
-                                        </div>
-                                    </>
-                                ) : (
-                                    <div className="text-left">
-                                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Enter Roll Number</label>
-                                        <input
-                                            type="text"
-                                            placeholder="e.g. 21BCE1045"
-                                            className="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                            value={formData.rollNumber}
-                                            onChange={(e) => setFormData({ ...formData, rollNumber: e.target.value })}
-                                        />
-                                        <p className="text-xs text-slate-400 mt-2">We will cross-reference this with university records.</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                        {/* Roll Number Input */}
+
 
                         {/* Terms and Submit */}
                         <div className="pt-4 border-t border-slate-100">

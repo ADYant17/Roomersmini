@@ -14,17 +14,21 @@ const LoginPage = ({ onNavigate }) => {
         setError('');
         setIsLoading(true);
 
-        // Mock Authentication Logic
         setTimeout(() => {
             setIsLoading(false);
-            // Basic check for edu email
-            if (formData.email.includes('.edu')) {
+
+            // Mock Authentication Logic (LocalStorage)
+            const storedUser = JSON.parse(localStorage.getItem('roomers_user'));
+
+            if (storedUser && storedUser.email === formData.email && storedUser.password === formData.password) {
+                // Successful Login
+                localStorage.setItem('roomers_session', 'true');
                 alert("Welcome back! Redirecting to dashboard...");
-                onNavigate('landing'); // Redirect to home/dashboard
+                onNavigate('dashboard'); // Redirect to dashboard
             } else {
-                setError("Please use your institutional email address (.edu) to log in.");
+                setError("Invalid email or password. Please try again.");
             }
-        }, 1500);
+        }, 1000);
     };
 
     const isFormValid = formData.email && formData.password;

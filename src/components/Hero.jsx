@@ -1,7 +1,7 @@
 import React from 'react';
 import { Shield, ArrowRight } from 'lucide-react';
 
-const Hero = ({ onNavigate }) => {
+const Hero = ({ onNavigate, onShowSafety }) => {
     return (
         <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="text-center max-w-3xl mx-auto">
@@ -23,12 +23,15 @@ const Hero = ({ onNavigate }) => {
                         <span>Lets Get Started</span>
                         <ArrowRight className="w-5 h-5" />
                     </button>
-                    <button className="w-full sm:w-auto bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-8 py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center">
+                    <button
+                        onClick={onShowSafety}
+                        className="w-full sm:w-auto bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-8 py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center"
+                    >
                         Learn about Safety
                     </button>
                 </div>
                 <p className="mt-6 text-sm text-slate-400">
-                    
+
                 </p>
             </div>
         </section>
